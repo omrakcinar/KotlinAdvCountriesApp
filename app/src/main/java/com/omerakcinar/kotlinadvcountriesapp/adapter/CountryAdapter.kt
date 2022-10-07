@@ -8,6 +8,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.omerakcinar.kotlinadvcountriesapp.R
 import com.omerakcinar.kotlinadvcountriesapp.databinding.RecyclerRowBinding
 import com.omerakcinar.kotlinadvcountriesapp.model.Country
+import com.omerakcinar.kotlinadvcountriesapp.util.downloadFromUrl
+import com.omerakcinar.kotlinadvcountriesapp.util.placeholderProgressBar
 import com.omerakcinar.kotlinadvcountriesapp.view.FeedFragmentDirections
 
 class CountryAdapter (val countryList : ArrayList<Country>): RecyclerView.Adapter<CountryAdapter.CountryViewHolder>() {
@@ -21,6 +23,8 @@ class CountryAdapter (val countryList : ArrayList<Country>): RecyclerView.Adapte
     override fun onBindViewHolder(holder: CountryViewHolder, position: Int) {
         holder.binding.countryNameRow.text = countryList[position].countryName
         holder.binding.regionNameRow.text = countryList[position].countryRegion
+        holder.binding.flagViewRow.downloadFromUrl(countryList[position].imageUrl,
+            placeholderProgressBar(holder.binding.root.context))
 
         holder.itemView.setOnClickListener {
             val action = FeedFragmentDirections.actionFeedFragmentToCountryFragment()
