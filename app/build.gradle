@@ -57,4 +57,15 @@ dependencies {
 
     // Swipe Refresh Layout
     implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.1.0"
+
+    // Retrofit
+    def retrofitVersion = '2.9.0'
+    implementation "com.squareup.retrofit2:retrofit:$retrofitVersion"
+    implementation "com.squareup.retrofit2:converter-gson:$retrofitVersion"
+    implementation "com.squareup.retrofit2:adapter-rxjava2:$retrofitVersion"
+
+    // RxJava
+    def rxJavaVersion = '2.1.1'
+    implementation "io.reactivex.rxjava2:rxjava:$rxJavaVersion"
+    implementation "io.reactivex.rxjava2:rxandroid:$rxJavaVersion"
 }
