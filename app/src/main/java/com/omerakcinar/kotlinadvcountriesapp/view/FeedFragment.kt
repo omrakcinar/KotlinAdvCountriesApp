@@ -48,7 +48,7 @@ class FeedFragment : Fragment() {
             binding.countryListRecycler.visibility = View.GONE
             binding.countryErrorTV.visibility = View.GONE
             binding.countryLoadingBar.visibility = View.VISIBLE
-            viewModel.refreshData()
+            viewModel.refreshFromApi()
             binding.swipeRefreshLayout.isRefreshing = false
         }
 

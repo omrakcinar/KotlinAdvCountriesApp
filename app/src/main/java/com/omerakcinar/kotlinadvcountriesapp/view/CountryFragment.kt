@@ -8,6 +8,8 @@ import android.view.ViewGroup
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.omerakcinar.kotlinadvcountriesapp.databinding.FragmentCountryBinding
+import com.omerakcinar.kotlinadvcountriesapp.util.downloadFromUrl
+import com.omerakcinar.kotlinadvcountriesapp.util.placeholderProgressBar
 import com.omerakcinar.kotlinadvcountriesapp.viewmodel.CountryViewModel
 
 class CountryFragment : Fragment() {
@@ -32,25 +34,29 @@ class CountryFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel = ViewModelProvider(this)[CountryViewModel::class.java]
 
         arguments?.let {
             countryUuid = CountryFragmentArgs.fromBundle(it).countryUuid
             println(countryUuid)
         }
 
-        observeLiveData()
+        viewModel = ViewModelProvider(this)[CountryViewModel::class.java]
+        viewModel.getDataFromRoom(countryUuid)
 
+        observeLiveData()
     }
 
     private fun observeLiveData(){
         viewModel.countryLiveData.observe(viewLifecycleOwner, Observer {
-            it?.let {
-                binding.countryNameDetail.text = it.countryName
-                binding.countryCapitalDetail.text = it.countryCapital
-                binding.countryRegionDetail.text = it.countryRegion
-                binding.countryCurrencyDetail.text = it.countryCurrency
-                binding.countryLanguageDetail.text = it.countryLanguage
+            it?.let { country  ->
+                binding.countryNameDetail.text = country.countryName
+                binding.countryCapitalDetail.text = country.countryCapital
+                binding.countryRegionDetail.text = country.countryRegion
+                binding.countryCurrencyDetail.text = country.countryCurrency
+                binding.countryLanguageDetail.text = country.countryLanguage
+                context?.let {
+                    binding.flagImageDetail.downloadFromUrl(country.imageUrl, placeholderProgressBar(it))
+                }
             }
         })
     }
