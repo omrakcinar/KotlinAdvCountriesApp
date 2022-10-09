@@ -10,14 +10,14 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelStore
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.omerakcinar.kotlinadvcountriesapp.R
 import com.omerakcinar.kotlinadvcountriesapp.adapter.CountryAdapter
 import com.omerakcinar.kotlinadvcountriesapp.databinding.FragmentFeedBinding
 import com.omerakcinar.kotlinadvcountriesapp.model.Country
 import com.omerakcinar.kotlinadvcountriesapp.viewmodel.FeedViewModel
+import kotlinx.android.synthetic.main.fragment_feed.*
 
 class FeedFragment : Fragment() {
-    private var _binding : FragmentFeedBinding? = null
-    private val binding get() = _binding!!
 
     private lateinit var viewModel : FeedViewModel
     private val countryAdapter = CountryAdapter(arrayListOf())
@@ -30,9 +30,7 @@ class FeedFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        _binding = FragmentFeedBinding.inflate(inflater,container,false)
-        val view = binding.root
-        return view
+        return inflater.inflate(R.layout.fragment_feed, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -41,15 +39,15 @@ class FeedFragment : Fragment() {
         viewModel = ViewModelProvider(this)[FeedViewModel::class.java]
         viewModel.refreshData()
 
-        binding.countryListRecycler.layoutManager = LinearLayoutManager(context)
-        binding.countryListRecycler.adapter = countryAdapter
+        countryListRecycler.layoutManager = LinearLayoutManager(context)
+        countryListRecycler.adapter = countryAdapter
 
-        binding.swipeRefreshLayout.setOnRefreshListener {
-            binding.countryListRecycler.visibility = View.GONE
-            binding.countryErrorTV.visibility = View.GONE
-            binding.countryLoadingBar.visibility = View.VISIBLE
+        swipeRefreshLayout.setOnRefreshListener {
+            countryListRecycler.visibility = View.GONE
+            countryErrorTV.visibility = View.GONE
+            countryLoadingBar.visibility = View.VISIBLE
             viewModel.refreshFromApi()
-            binding.swipeRefreshLayout.isRefreshing = false
+            swipeRefreshLayout.isRefreshing = false
         }
 
         observeLiveData()
@@ -58,7 +56,7 @@ class FeedFragment : Fragment() {
     private fun observeLiveData(){
         viewModel.countries.observe(viewLifecycleOwner, Observer {
             it?.let {
-                binding.countryListRecycler.visibility = View.VISIBLE
+                countryListRecycler.visibility = View.VISIBLE
                 countryAdapter.updateCountryList(it)
             }
         })
@@ -66,11 +64,11 @@ class FeedFragment : Fragment() {
         viewModel.countryError.observe(viewLifecycleOwner, Observer {
             it?.let {
                 if (it){
-                    binding.countryErrorTV.visibility = View.VISIBLE
-                    binding.countryListRecycler.visibility = View.GONE
-                    binding.countryLoadingBar.visibility = View.GONE
+                    countryErrorTV.visibility = View.VISIBLE
+                    countryListRecycler.visibility = View.GONE
+                    countryLoadingBar.visibility = View.GONE
                 } else {
-                    binding.countryErrorTV.visibility = View.GONE
+                    countryErrorTV.visibility = View.GONE
                 }
             }
         })
@@ -78,11 +76,11 @@ class FeedFragment : Fragment() {
         viewModel.countryLoading.observe(viewLifecycleOwner, Observer {
             it?.let {
                 if (it){
-                    binding.countryLoadingBar.visibility = View.VISIBLE
-                    binding.countryListRecycler.visibility = View.GONE
-                    binding.countryErrorTV.visibility = View.GONE
+                    countryLoadingBar.visibility = View.VISIBLE
+                    countryListRecycler.visibility = View.GONE
+                    countryErrorTV.visibility = View.GONE
                 } else {
-                    binding.countryLoadingBar.visibility = View.GONE
+                    countryLoadingBar.visibility = View.GONE
                 }
             }
         })

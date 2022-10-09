@@ -5,17 +5,19 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import com.omerakcinar.kotlinadvcountriesapp.R
 import com.omerakcinar.kotlinadvcountriesapp.databinding.FragmentCountryBinding
 import com.omerakcinar.kotlinadvcountriesapp.util.downloadFromUrl
 import com.omerakcinar.kotlinadvcountriesapp.util.placeholderProgressBar
 import com.omerakcinar.kotlinadvcountriesapp.viewmodel.CountryViewModel
+import kotlinx.android.synthetic.main.fragment_country.*
 
 class CountryFragment : Fragment() {
     private var countryUuid = -1
-    private var _binding : FragmentCountryBinding? = null
-    private val binding get() = _binding!!
+    private lateinit var dataBinding: FragmentCountryBinding
 
     private lateinit var viewModel: CountryViewModel
 
@@ -27,9 +29,8 @@ class CountryFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        _binding = FragmentCountryBinding.inflate(inflater,container,false)
-        val view = binding.root
-        return view
+        dataBinding = DataBindingUtil.inflate(inflater,R.layout.fragment_country,container,false)
+        return dataBinding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -49,14 +50,20 @@ class CountryFragment : Fragment() {
     private fun observeLiveData(){
         viewModel.countryLiveData.observe(viewLifecycleOwner, Observer {
             it?.let { country  ->
-                binding.countryNameDetail.text = country.countryName
-                binding.countryCapitalDetail.text = country.countryCapital
-                binding.countryRegionDetail.text = country.countryRegion
-                binding.countryCurrencyDetail.text = country.countryCurrency
-                binding.countryLanguageDetail.text = country.countryLanguage
+
+                dataBinding.selectedCountry = country
+
+                /*
+                countryNameDetail.text = country.countryName
+                countryCapitalDetail.text = country.countryCapital
+                countryRegionDetail.text = country.countryRegion
+                countryCurrencyDetail.text = country.countryCurrency
+                countryLanguageDetail.text = country.countryLanguage
                 context?.let {
-                    binding.flagImageDetail.downloadFromUrl(country.imageUrl, placeholderProgressBar(it))
+                    flagImageDetail.downloadFromUrl(country.imageUrl, placeholderProgressBar(it))
                 }
+                 */
+
             }
         })
     }

@@ -2,10 +2,29 @@
 <layout
     xmlns:android="http://schemas.android.com/apk/res/android">
 
+    <data>
+        <variable
+            name="country"
+            type="com.omerakcinar.kotlinadvcountriesapp.model.Country" />
+        <variable
+            name="listener"
+            type="com.omerakcinar.kotlinadvcountriesapp.adapter.CountryClickListener" />
+    </data>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="200dp"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:onClick="@{listener::onCountryClicked}">
+
+        <TextView
+            android:id="@+id/countryUuidText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            android:text="@{String.valueOf(country.uuid)}">
+
+        </TextView>
 
         <ImageView
             android:id="@+id/flagViewRow"
@@ -13,7 +32,7 @@
             android:layout_height="match_parent"
             android:layout_weight="2"
             android:padding="3dp"
-            android:src="@mipmap/ic_launcher_round">
+            android:downloadUrl="@{country.imageUrl}">
 
         </ImageView>
 
@@ -28,7 +47,7 @@
                 android:id="@+id/countryNameRow"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="COUNTRY NAME"
+                android:text="@{country.countryName}"
                 android:padding="5dp"
                 android:textStyle="bold"
                 android:textSize="20sp">
@@ -39,7 +58,7 @@
                 android:id="@+id/regionNameRow"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Region"
+                android:text="@{country.countryRegion}"
                 android:padding="5dp"
                 android:textSize="17sp">
 
